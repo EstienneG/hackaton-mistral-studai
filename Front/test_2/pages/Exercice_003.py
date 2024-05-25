@@ -1,5 +1,5 @@
 import streamlit as st
-
+import streamlit.components.v1 as components
 
 # HTML and JavaScript for drag-and-drop functionality with adjusted font and text color
 drag_and_drop_html = """
@@ -77,7 +77,7 @@ drag_and_drop_html = """
 """
 
 # Display the drag-and-drop interface
-st.components.v1.html(drag_and_drop_html, height=600)
+components.html(drag_and_drop_html, height=600)
 
 # Function to check the answers
 def check_answers(dropped_answers):
