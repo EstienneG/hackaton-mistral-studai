@@ -15,7 +15,7 @@ check = 0
 
 # Function to display the file upload page
 def file_upload_page():
-    st.image(logo, width=100)
+    st.image(logo, width=150)
     st.title("STUDAI")
 
     st.markdown("## Upload your files")

@@ -8,11 +8,11 @@ st.set_page_config(
 )
 
 # Load your logo image
-logo = "/Users/othmane/Desktop/OTHO_CODING/Streamlit/001/test_2/logo.png"
+logo = "logo.png"
 
 # Function to display the chapter selection page
 def chapter_selection_page():
-    st.image(logo, width=100)
+    st.image(logo, width=150)
     st.title("STUDAI - Chapter Selection")
 
     chapters = [

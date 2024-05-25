@@ -1,7 +1,10 @@
 import streamlit as st
-import streamlit.components.v1 as components
 
-# HTML and JavaScript for drag-and-drop functionality with adjusted font and text color
+font_import = """
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+"""
+
+# HTML and JavaScript for drag-and-drop functionality with adaptable answer boxes
 drag_and_drop_html = """
     <div>
         <style>
@@ -12,25 +15,26 @@ drag_and_drop_html = """
                 background-color: #ddd;
                 border: 1px solid #ccc;
                 cursor: move;
-                font-family: 'Futura';
+                font-family: 'Source Sans Pro', sans-serif; /* Font family for answer options */
+                font-size: 16px; /* Font size for answer options */
                 color: black;
+                text-align: center;
             }
             .droppable {
                 display: inline-block;
-                width: 150px;
-                height: 40px;
+                min-width: 150px; /* Minimum width of the answer boxes */
+                padding: 8px;
                 margin: 4px;
                 background-color: #2c3e50;
                 border: 2px dashed #ccc;
                 vertical-align: top;
-                font-family: 'Futura';
+                font-family: 'Source Sans Pro', sans-serif; /* Font family for blanks */
+                font-size: 16px; /* Font size for blanks */
                 color: white;
                 text-align: center;
-                line-height: 50px;
-                font-size: 10px;
             }
             body {
-                font-family: 'Futura';
+                font-family: 'Source Sans Pro', sans-serif;
                 color: white;
             }
         </style>
@@ -46,20 +50,26 @@ drag_and_drop_html = """
             function drop(ev) {
                 ev.preventDefault();
                 var data = ev.dataTransfer.getData("text");
-                ev.target.innerHTML = document.getElementById(data).innerHTML;
-                ev.target.style.border = '2px solid green';
+                var dropbox = ev.target;
+                if (dropbox.className == "droppable") {
+                    dropbox.innerHTML = document.getElementById(data).innerHTML;
+                    dropbox.style.border = '2px solid green';
+                }
             }
 
             function resetDrop(ev) {
                 ev.preventDefault();
                 var data = ev.dataTransfer.getData("text");
-                ev.target.appendChild(document.getElementById(data));
-                ev.target.style.border = '2px dashed #ccc';
+                var dropbox = ev.target;
+                if (dropbox.className == "droppable") {
+                    dropbox.innerHTML = "";
+                    dropbox.style.border = '2px dashed #ccc';
+                }
             }
         </script>
         <p><strong>Drag the answers to the blanks:</strong></p>
         <div id="answers" ondrop="resetDrop(event)" ondragover="allowDrop(event)">
-            <div id="Amazon River" class="draggable" draggable="true" ondragstart="drag(event)">Amazon River</div>
+            <div id="Amazon River" class="draggable" draggable="true" ondragstart="drag(event)">Amazon River oooooooooooo AHAHA LLEL MMO</div>
             <div id="Nile River" class="draggable" draggable="true" ondragstart="drag(event)">Nile River</div>
             <div id="Mississippi River" class="draggable" draggable="true" ondragstart="drag(event)">Mississippi River</div>
             <div id="Atlantic Ocean" class="draggable" draggable="true" ondragstart="drag(event)">Atlantic Ocean</div>
@@ -78,7 +88,7 @@ drag_and_drop_html = """
 """
 
 # Display the drag-and-drop interface
-components.html(drag_and_drop_html, height=500)
+st.components.v1.html(drag_and_drop_html, height=600)
 
 # Function to check the answers
 def check_answers(dropped_answers):
