@@ -17,12 +17,14 @@ drag_and_drop_html = """
                 cursor: move;
                 font-family: 'Source Sans Pro', sans-serif; /* Font family for answer options */
                 font-size: 16px; /* Font size for answer options */
+                font-weight: bold;
                 color: black;
                 text-align: center;
             }
             .droppable {
                 display: inline-block;
                 min-width: 150px; /* Minimum width of the answer boxes */
+                min-height: 25px; /* Minimum height of the answer boxes */
                 padding: 8px;
                 margin: 4px;
                 background-color: #2c3e50;
@@ -30,11 +32,13 @@ drag_and_drop_html = """
                 vertical-align: top;
                 font-family: 'Source Sans Pro', sans-serif; /* Font family for blanks */
                 font-size: 16px; /* Font size for blanks */
+                font-weight: bold;
                 color: white;
                 text-align: center;
             }
             body {
                 font-family: 'Source Sans Pro', sans-serif;
+                font-size: 22px;
                 color: white;
             }
         </style>
@@ -67,7 +71,7 @@ drag_and_drop_html = """
                 }
             }
         </script>
-        <p><strong>Drag the answers to the blanks:</strong></p>
+        <h1><strong>Drag the answers to the blanks:</strong></h1>
         <div id="answers" ondrop="resetDrop(event)" ondragover="allowDrop(event)">
             <div id="Amazon River" class="draggable" draggable="true" ondragstart="drag(event)">Amazon River oooooooooooo AHAHA LLEL MMO</div>
             <div id="Nile River" class="draggable" draggable="true" ondragstart="drag(event)">Nile River</div>
