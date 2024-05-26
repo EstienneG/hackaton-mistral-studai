@@ -1,0 +1,6 @@
+api_keys:
+  mistral_api_key: "ImsUHfFLA6OjlX6mARbnM1YcDOy7ujsq"
+
+models:
+  llm_model_name: "open-mixtral-8x22b"
+  embedding_model_name: "mistral-embed"
