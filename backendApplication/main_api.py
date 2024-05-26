@@ -26,6 +26,9 @@ class ChapterSummaryRequest(BaseModel):
 class ChapterSummaryResponse(BaseModel):
     chapter_summary: str
 
+class ChapterExerciseResponse(BaseModel):
+    chapter_exercise: str
+
 @app.post("/generate-summary", response_model=ChapterSummaryResponse)
 def process_text_endpoint(request: ChapterSummaryRequest):
 
@@ -35,10 +38,10 @@ def process_text_endpoint(request: ChapterSummaryRequest):
 
     return {"chapter_summary":output_text}
 
-@app.post("/generate-exercise", response_model=ChapterSummaryResponse)
+@app.post("/generate-exercise", response_model=ChapterExerciseResponse)
 def process_text_endpoint(request: ChapterSummaryRequest):
-    retrieved_cunks_str = retrieval("hackaton-mistral-studai/data/chromadb", api_key, request.chapter_name)
+    retrieved_cunks_str = retrieval("../data/chromadb", api_key, request.chapter_name)
 
     exercise = generate_fill_gap(retrieved_cunks_str, request.difficulty_selected)
 
-    return {"chapter_exercise":exercise}
+    return {"chapter_exercise": exercise}

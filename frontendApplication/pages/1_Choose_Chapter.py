@@ -59,7 +59,7 @@ def chapter_selection_page():
 
     with col1:
         if st.button(f"Chapter 1: Introduction\nAn overview of the course.", key="chapter_1", disabled="confirmed_selection" in st.session_state, help="An overview of the course."):
-            st.session_state["selected_chapter"] = 1
+            st.session_state["selected_chapter"] = "Chapter Introduction"
 
     with col2:
         if st.button(f"Chapter 2: Basics\nLearn the basics of the subject.", key="chapter_2", disabled="confirmed_selection" in st.session_state, help="Learn the basics of the subject."):

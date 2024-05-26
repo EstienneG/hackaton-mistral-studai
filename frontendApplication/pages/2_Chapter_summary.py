@@ -1,4 +1,10 @@
 import streamlit as st
+import requests
+
+if "chapter_summary" not in st.session_state:
+        st.session_state["chapter_summary"] = ""
+        
+
 
 # Setting the page configuration
 st.set_page_config(
@@ -53,10 +59,27 @@ def chapter_selection_page():
             }
         </style>
     """, unsafe_allow_html=True)
-    st.markdown(f"<div style='text-align: justify; font-size: 16px; color: #333;'>{summary_content}</div>", unsafe_allow_html=True)
+    st.markdown(f'<div style="text-align: justify; font-size: 16px; color: #333;">{st.session_state["chapter_summary"]}</div>', unsafe_allow_html=True)
     if st.button("Chapter understood!"):
         # TODO: Call the backend API to generate the texte à trou
-        st.write("Wait a few moments, we're going to test you!")
+        with st.spinner('Generating exercise'):
+            api_url = "http://127.0.0.1:8000/generate-exercise"
+
+            payload = {
+                    "chapter_name": st.session_state['selected_chapter'],
+                    "difficulty_selected": st.session_state['selected_level']
+            }
+
+            response = requests.post(api_url, json=payload)
+            
+            if response.status_code == 200:
+                # Afficher la réponse de l'API
+                result = response.json()
+
+                st.session_state['chapter_exercise'] = result['chapter_exercise']
+            else:
+                st.write("Erreur dans l'appel à l'API:", response.status_code)
+        st.write('Exercise generated!')
 
 
 if __name__ == "__main__":

@@ -44,7 +44,7 @@ def init_exercise_writer(llm:ChatMistralAI, revtrieved_chunks:str):
     }}     
     """
 
-    human_message = "{difficulty}"
+    human_message = "{text}"
 
     exercise_template = ChatPromptTemplate.from_messages([("system", system_message_fgap_choice), ("human", human_message)])
 
@@ -111,16 +111,15 @@ def init_critic(llm:ChatMistralAI, revtrieved_chunks:str):
 
 def invoke_chain_of_agents(difficulty:str, writter:LLMChain, critic_chain:LLMChain):
     # Step 1: Generate the initial exercise
-    exercise = writter.invoke({"difficulty": difficulty})
+    exercise = writter.invoke({"text": difficulty})
 
     # Step 2: Critic Agent 1 evaluates the exercise
     evaluation_1 = critic_chain.invoke({"exercise": exercise['text']})
-    print("Evaluation by Critic 1:", evaluation_1['text'])
 
     # Integrate feedback from Critic 1 and regenerate the exercise
     improved_exercise = writter.invoke({"text": evaluation_1['text']})
 
-    return improved_exercise
+    return improved_exercise['text']
 
 def generate_fill_gap(revtrieved_chunks:str, difficulty:str):
     llm = ChatMistralAI(api_key = "ImsUHfFLA6OjlX6mARbnM1YcDOy7ujsq", model = "open-mixtral-8x22b", temperature=0)
