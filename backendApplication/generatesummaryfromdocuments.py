@@ -19,23 +19,20 @@ from langchain.chains.llm import LLMChain
 
 def generate_summary_from_document(input: str, difficulty: str) -> str:
 
-    llm = ChatMistralAI(api_key = "ImsUHfFLA6OjlX6mARbnM1YcDOy7ujsq")
+    llm = ChatMistralAI(api_key = "ImsUHfFLA6OjlX6mARbnM1YcDOy7ujsq", model_name="mistral-small-latest")
 
     output_parser = StrOutputParser()
 
     writer_prompt = ChatPromptTemplate.from_messages([
         ("system", """
         You are the redactor. Given a chapter of a book, you are able to write a small course in less than 300 words, that is very ludic and interesting about the topic of the corresponding document.
-        You need to adapt the informations that you teach based on 3 levels of difficulty:
-        - Newbie
-        - Intermediate
-        - Advanced
-        """
+        You need to adapt the informations that you teach based on the level of difficulty: 
+        """ + difficulty
         ),
         ("user", "{input}"),
         ])
 
-    # Notice that we need to align the `memory_key`
+
     memory = ConversationBufferMemory(memory_key="writer_history")
 
     writer_conversation = LLMChain(
@@ -52,10 +49,6 @@ def generate_summary_from_document(input: str, difficulty: str) -> str:
     difficulty_critic_prompt = ChatPromptTemplate.from_messages([
         ("system", """
         You are the critic. You are part of a course redaction team experts that creates very ludic and interesting courses based on real books to make them more readable and interactive. Your role in this group is to evaluate the course written by the redactor so that it respects the level of difficulty asked by the user.
-        Ther 3 levels of difficulty:
-        - Newbie
-        - Intermediate
-        - Advanced
 
         You will critic the course given by the redactor evaluate if it respects the difficulty level and explain why.
         """

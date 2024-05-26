@@ -7,6 +7,8 @@ from langchain_core.documents import Document
 from langchain_mistralai import MistralAIEmbeddings
 from langchain.vectorstores import Chroma
 from uuid import uuid4
+import logging
+import os
 
 class PDFProcessor:
     def __init__(self, pdf_path):
@@ -108,39 +110,69 @@ class PDFProcessor:
 
         return transformed_array
 
-def upload_document(pdf_path:str, api_key:str, output_path:str, embedding_model_name:str):
-    #pdf_path = "hackaton-mistral-studai/data/RAGAS_09_2023.pdf"
-    processor = PDFProcessor(pdf_path)
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-    text = processor.extract_and_clean_text()
-    processor.partition_pdf()
-    processor.split_text_by_chapters()
-    structured_text = processor.transform_sections_to_array()
-    transformed_text = processor.transform_array(structured_text)
-
-    # Convert list to string with a space separator
-    structured_text = ' '.join(structured_text)
-
-    # Initialize the text splitter
-    splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20, separators=['Chapter:', '\n\n'])
-    chunks = splitter.split_text(structured_text)
-    docs = splitter.create_documents(chunks)
-
-    # Initialize MistralAI embeddings and ChromaDB
-    api_key = "your_api_key_here"  # Replace with your actual API key
-    output_path = "hackaton-mistral-studai/data/chromadb"
-    mistral_embeddings = MistralAIEmbeddings(api_key=api_key)
-    mistral_embeddings.model = "mistral-embed"  
-    chroma_db = Chroma.from_documents(docs, mistral_embeddings, persist_directory=output_path)
-
-
-    chapters_structure = [] 
-    for chapter in processor.chapters:
-        chapters_structure.append({
-            "chapter_name": chapter,
-            "chapter_id": uuid4()
-        })
+def upload_document(pdf_path:str, api_key:str, output_path:str, embedding_model_name:str, workspace_name:str):
+    try:
+        logger.info("Initializing PDF Processor...")
+        processor = PDFProcessor(pdf_path)
+        
+        # Extract and clean text from the PDF
+        logger.info("Extracting and cleaning text from PDF...")
+        text = processor.extract_and_clean_text()
+        if not text:
+            raise ValueError("No text extracted from the PDF.")
+        
+        logger.info("Partitioning PDF and splitting text by chapters...")
+        processor.partition_pdf()
+        processor.split_text_by_chapters()
+        structured_text = processor.transform_sections_to_array()
+        
+        if not structured_text:
+            raise ValueError("Failed to transform sections into array.")
+        
+        logger.info(f"Structured text length: {len(structured_text)}")
+        
+        transformed_text = processor.transform_array(structured_text)
+        
+        # Convert list to string with a space separator
+        structured_text_str = ' '.join(structured_text)
+        
+        # Initialize the text splitter
+        logger.info("Splitting text into chunks...")
+        splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20, separators=['Chapter:', '\n\n'])
+        chunks = splitter.split_text(structured_text_str)
+        if not chunks:
+            raise ValueError("No chunks generated from the structured text.")
+        
+        logger.info(f"Number of chunks created: {len(chunks)}")
+        
+        docs = splitter.create_documents(chunks)
+        
+        # Initialize MistralAI embeddings and ChromaDB
+        logger.info("Initializing MistralAI embeddings and ChromaDB...")
+        mistral_embeddings = MistralAIEmbeddings(api_key=api_key)
+        mistral_embeddings.model = embedding_model_name
+        
+        output_path = f"../data/{workspace_name}/chromadb"
+        os.makedirs(output_path, exist_ok=True)
+        
+        chroma_db = Chroma.from_documents(docs, mistral_embeddings, persist_directory=output_path)
+        
+        chapters_structure = []
+        for chapter in processor.chapters:
+            chapters_structure.append({
+                "chapter_name": chapter,
+                "chapter_id": str(uuid4())
+            })
+        
+        logger.info("Document processing completed successfully.")
+        return chapters_structure
     
-    return chapters_structure
+    except Exception as e:
+        logger.error(f"Failed to process document: {e}")
+        raise e
 
 

@@ -122,6 +122,8 @@ def invoke_chain_of_agents(difficulty:str, writter:LLMChain, critic_chain:LLMCha
     return improved_exercise['text']
 
 def generate_fill_gap(revtrieved_chunks:str, difficulty:str):
+    revtrieved_chunks = revtrieved_chunks.replace('{', '{{').replace('}', '}}')
+
     llm = ChatMistralAI(api_key = "ImsUHfFLA6OjlX6mARbnM1YcDOy7ujsq", model = "open-mixtral-8x22b", temperature=0)
     writter = init_exercise_writer(llm, revtrieved_chunks)
     critic = init_critic(llm, revtrieved_chunks)

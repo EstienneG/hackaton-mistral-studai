@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import json
 
 # Setting the page configuration
 st.set_page_config(
@@ -24,21 +25,24 @@ def file_upload_page():
 
     if uploaded_file is not None:
         st.write("Uploaded file:", uploaded_file.name)
+        file_contents = uploaded_file.read()
 
-        # Define the API endpoint
-        api_url = "https://your-api-endpoint.com/upload"
-        
         if st.button("Upload class material"):
             # Prepare the file for upload
-            files = {'file': (uploaded_file.name, uploaded_file, uploaded_file.type)}
+            files = {
+                "upload_file": (uploaded_file.name, file_contents, uploaded_file.type)
+            }
 
-            # TODO: call the backend API to upload the file and return jsp quoi
+            api_url = "http://127.0.0.1:8000/upload_document"
+
+            # Send the file to the API
             response = requests.post(api_url, files=files)
+
 
             # Display the response from the API
             if response.status_code == 200:
                 st.success("File successfully uploaded !")
-                st.session_state["page"] = "chapter_selection"
+                st.session_state['chapters_structure'] = json.loads(response.text)['chapters']
         
             else:
                 st.error(f"Failed to upload file. Status code: {response.status_code}")
