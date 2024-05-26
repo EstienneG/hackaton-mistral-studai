@@ -34,6 +34,7 @@ def process_text_endpoint(request: ChapterSummaryRequest):
 
     retrieve_cunks_str = retrieval("../data/chromadb", api_key, request.chapter_name)
 
+    # TODO: changer le prompt système du writer dans generate_summary_from_document
     output_text = generate_summary_from_document(retrieve_cunks_str, request.difficulty_selected)
 
     return {"chapter_summary":output_text}

@@ -111,21 +111,9 @@ if st.button("Submit"):
     dropped_answers["blank2"] = st.session_state.get("blank2", "")
     dropped_answers["blank3"] = st.session_state.get("blank3", "")
     
-    api_url = "http://127.0.0.1:8000/generate-summary"
 
-    payload = {
-            "chapter_name": st.session_state['selected_chapter'],
-            "difficulty_selected": st.session_state['selected_level']
-    }
-
-    response = requests.post(api_url, json=payload)
-    
-    if response.status_code == 200:
-        # Afficher la réponse de l'API
-        result = response.json()
-        st.write("Réponse de l'API :", result["chapter_summary"])
-    else:
-        st.write("Erreur dans l'appel à l'API:", response.status_code)
+    # TODO: make the user win/lose. Eventually populate score data in page 4, use
+    st.session_state['chapter_exercise'] # to define textes à trous
 
 
     if check_answers(dropped_answers):
