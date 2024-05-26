@@ -29,21 +29,16 @@ class ChapterSummaryResponse(BaseModel):
 @app.post("/generate-summary", response_model=ChapterSummaryResponse)
 def process_text_endpoint(request: ChapterSummaryRequest):
 
-<<<<<<< HEAD
-    retrieve_cunks_str = retrieval("../data/chromadb", api_key, request.chapter_selected)
+    retrieve_cunks_str = retrieval("../data/chromadb", api_key, request.chapter_name)
 
     output_text = generate_summary_from_document(retrieve_cunks_str, request.difficulty_selected)
-=======
-    # text_chunks = retrieve_chunks(request.chapter_name)
-    output_text = generate_summary_from_document(text_chunks, request.difficulty_selected)
->>>>>>> refacto-front
 
     return {"chapter_summary":output_text}
 
 @app.post("/generate-exercise", response_model=ChapterSummaryResponse)
 def process_text_endpoint(request: ChapterSummaryRequest):
-    retrieved_cunks_str = retrieval("hackaton-mistral-studai/data/chromadb", api_key, request.chapter_selected)
+    retrieved_cunks_str = retrieval("hackaton-mistral-studai/data/chromadb", api_key, request.chapter_name)
 
     exercise = generate_fill_gap(retrieved_cunks_str, request.difficulty_selected)
 
-    return {"chapter_summary":exercise}
+    return {"chapter_exercise":exercise}

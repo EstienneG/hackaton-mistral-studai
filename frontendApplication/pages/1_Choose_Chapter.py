@@ -89,7 +89,7 @@ def chapter_selection_page():
             api_url = "http://127.0.0.1:8000/generate-summary"
 
             payload = {
-                    "chapter_selected": st.session_state['selected_chapter'],
+                    "chapter_name": st.session_state['selected_chapter'],
                     "difficulty_selected": st.session_state['selected_level']
             }
 
