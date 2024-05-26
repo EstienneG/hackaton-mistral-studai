@@ -1,0 +1,50 @@
+[
+    {
+        "chapter_name": "RAGAS: Automated Evaluation of Retrieval Augmented Generation",
+        "chapter_id": "6e4ac537-bb78-49a9-9ab6-038918bd59c5"
+    },
+    {
+        "chapter_name": "Abstract",
+        "chapter_id": "a712da19-b8f3-45f5-b0c4-acf7e67e070e"
+    },
+    {
+        "chapter_name": "Introduction",
+        "chapter_id": "cbebe3da-f3a8-453b-a16a-98df0db0d7b4"
+    },
+    {
+        "chapter_name": "2 Related Work",
+        "chapter_id": "7a129d8a-0e6d-4ea1-8289-fc4c4c42ea2b"
+    },
+    {
+        "chapter_name": "3 Evaluation Strategies",
+        "chapter_id": "e5b42b28-7411-41b5-a2e6-7b7b4cd02c9c"
+    },
+    {
+        "chapter_name": "4 The WikiEval Dataset",
+        "chapter_id": "d67780b1-374d-4a2f-8a4c-ebb864a3297a"
+    },
+    {
+        "chapter_name": "5 Experiments",
+        "chapter_id": "5bc018ff-4624-4446-bd6b-3ccdcc525772"
+    },
+    {
+        "chapter_name": "6 Conclusions",
+        "chapter_id": "c0c16ead-b40a-4e4c-9ab3-ace2b842cf80"
+    },
+    {
+        "chapter_name": "References",
+        "chapter_id": "a8257e5e-9fa9-4d44-8a08-93942acc72b8"
+    },
+    {
+        "chapter_name": "A Examples from WikiEval",
+        "chapter_id": "d7e1d10f-0509-47ae-8b62-76de07125f78"
+    },
+    {
+        "chapter_name": "Question",
+        "chapter_id": "c27fac3f-936f-407f-b68c-c128ff4bbced"
+    },
+    {
+        "chapter_name": "Context",
+        "chapter_id": "d9f5457d-1db3-4494-86d9-32bda93faaa3"
+    }
+]

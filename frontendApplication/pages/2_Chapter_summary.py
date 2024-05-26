@@ -56,25 +56,33 @@ def chapter_selection_page():
     st.markdown(f'<div style="text-align: justify; font-size: 16px; color: #333;">{st.session_state["chapter_summary"]}</div>', unsafe_allow_html=True)
     if st.button("Chapter understood!"):
         
-        with st.spinner('Generating exercise'):
-            api_url = "http://127.0.0.1:8000/generate-exercise"
+        with st.spinner('Generating exercises'):
+            api_gap_url = "http://127.0.0.1:8000/generate-exercise"
+            api_qcm_url = "http://127.0.0.1:8000/generate-qcm"
 
             payload = {
                     "chapter_name": st.session_state['selected_chapter'],
                     "difficulty_selected": st.session_state['selected_level'],
                     "db_workspace_name": ""
-
             }
 
-            response = requests.post(api_url, json=payload)
+            response_gap = requests.post(api_gap_url, json=payload)
+            response_qcm = requests.post(api_qcm_url, json=payload)
             
-            if response.status_code == 200:
+            if response_gap.status_code == 200:
                 # Afficher la réponse de l'API
-                result = response.json()
+                result = response_gap.json()
 
                 st.session_state['chapter_exercise'] = result['chapter_exercise']
             else:
-                st.write("Erreur dans l'appel à l'API:", response.status_code)
+                st.write("Erreur dans l'appel à l'API:", response_gap.status_code)
+            
+            if response_qcm.status_code == 200:
+                # Afficher la réponse de l'API
+                result = response_qcm.json()
+                st.session_state['chapter_qcm'] = result['chapter_exercise']
+            else:
+                st.write("Erreur dans l'appel à l'API:", response_qcm.status_code)
         st.write('Exercise generated!')
 
 

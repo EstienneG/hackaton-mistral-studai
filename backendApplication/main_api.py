@@ -9,7 +9,7 @@ from pathlib import Path
 import logging
 from generatesummaryfromdocuments import generate_summary_from_document
 from retrieval import retrieval
-from generate_fill_gap import generate_fill_gap
+from generate_exercise import generate_fill_gap, generate_qcm
 from vector_db import upload_document
 import os
 
@@ -53,6 +53,14 @@ def generate_exercise_endpoint(request: ChapterSummaryRequest):
     retrieved_chunks_str = retrieval(f"../data/{request.db_workspace_name}/chromadb", api_key, request.chapter_name)
     
     exercise = generate_fill_gap(retrieved_chunks_str, request.difficulty_selected)
+
+    return {"chapter_exercise": exercise}
+
+@app.post("/generate-qcm", response_model=ChapterExerciseResponse)
+def generate_exercise_endpoint(request: ChapterSummaryRequest):
+    retrieved_chunks_str = retrieval(f"../data/{request.db_workspace_name}/chromadb", api_key, request.chapter_name)
+    
+    exercise = generate_qcm(retrieved_chunks_str, request.difficulty_selected)
 
     return {"chapter_exercise": exercise}
 
