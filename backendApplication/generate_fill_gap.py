@@ -113,13 +113,13 @@ def invoke_chain_of_agents(difficulty:str, writter:LLMChain, critic_chain:LLMCha
     # Step 1: Generate the initial exercise
     exercise = writter.invoke({"text": difficulty})
 
-    # Step 2: Critic Agent 1 evaluates the exercise
-    evaluation_1 = critic_chain.invoke({"exercise": exercise['text']})
+    # # Step 2: Critic Agent 1 evaluates the exercise
+    # evaluation_1 = critic_chain.invoke({"exercise": exercise['text']})
 
-    # Integrate feedback from Critic 1 and regenerate the exercise
-    improved_exercise = writter.invoke({"text": evaluation_1['text']})
+    # # Integrate feedback from Critic 1 and regenerate the exercise
+    # improved_exercise = writter.invoke({"text": evaluation_1['text']})
 
-    return improved_exercise['text']
+    return exercise['text']
 
 def generate_fill_gap(revtrieved_chunks:str, difficulty:str):
     revtrieved_chunks = revtrieved_chunks.replace('{', '{{').replace('}', '}}')

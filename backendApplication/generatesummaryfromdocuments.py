@@ -43,39 +43,39 @@ def generate_summary_from_document(input: str, difficulty: str) -> str:
     )
 
     first_summary = writer_conversation.run('You are going to summarize for a '+ difficulty +'. Here is the information : ' + input)
+    return first_summary
+    # """<h2>Definition of the difficulty critic and answer of the writer</h2>"""
 
-    """<h2>Definition of the difficulty critic and answer of the writer</h2>"""
+    # difficulty_critic_prompt = ChatPromptTemplate.from_messages([
+    #     ("system", """
+    #     You are the critic. You are part of a course redaction team experts that creates very ludic and interesting courses based on real books to make them more readable and interactive. Your role in this group is to evaluate the course written by the redactor so that it respects the level of difficulty asked by the user.
 
-    difficulty_critic_prompt = ChatPromptTemplate.from_messages([
-        ("system", """
-        You are the critic. You are part of a course redaction team experts that creates very ludic and interesting courses based on real books to make them more readable and interactive. Your role in this group is to evaluate the course written by the redactor so that it respects the level of difficulty asked by the user.
-
-        You will critic the course given by the redactor evaluate if it respects the difficulty level and explain why.
-        """
-        ),
-        ("user", "{input}"),
-        ])
-
-
-    difficulty_critic_chain = difficulty_critic_prompt | llm | output_parser
-    difficulty_critic_output = difficulty_critic_chain.invoke('For the difficulty ' + difficulty + 'critic this summary :' + first_summary)
-
-    summary_difficulty_critiqued = writer_conversation.run(difficulty_critic_output)
+    #     You will critic the course given by the redactor evaluate if it respects the difficulty level and explain why.
+    #     """
+    #     ),
+    #     ("user", "{input}"),
+    #     ])
 
 
-    style_critic_prompt = ChatPromptTemplate.from_messages([
-        ("system", """
-        You are the critic. You are part of a course redaction team experts that creates very ludic and interesting courses based on real books to make them more readable and interactive. Your role in this group is to evaluate the course written by the redactor so that it is ludic and interesting.
-        You will critic the course given by the redactor, evaluate if it is ludic and interesting and explain why.
-        """
-        ),
-        ("user", "{input}"),
-        ])
+    # difficulty_critic_chain = difficulty_critic_prompt | llm | output_parser
+    # difficulty_critic_output = difficulty_critic_chain.invoke('For the difficulty ' + difficulty + 'critic this summary :' + first_summary)
+
+    # summary_difficulty_critiqued = writer_conversation.run(difficulty_critic_output)
 
 
-    style_critic_chain = style_critic_prompt | llm | output_parser
-    style_critic_output = style_critic_chain.invoke(summary_difficulty_critiqued)
+    # style_critic_prompt = ChatPromptTemplate.from_messages([
+    #     ("system", """
+    #     You are the critic. You are part of a course redaction team experts that creates very ludic and interesting courses based on real books to make them more readable and interactive. Your role in this group is to evaluate the course written by the redactor so that it is ludic and interesting.
+    #     You will critic the course given by the redactor, evaluate if it is ludic and interesting and explain why.
+    #     """
+    #     ),
+    #     ("user", "{input}"),
+    #     ])
 
-    summary_style_critiqued = writer_conversation.run(style_critic_output)
 
-    return summary_style_critiqued
+    # style_critic_chain = style_critic_prompt | llm | output_parser
+    # style_critic_output = style_critic_chain.invoke(summary_difficulty_critiqued)
+
+    # summary_style_critiqued = writer_conversation.run(style_critic_output)
+
+    # return summary_style_critiqued
