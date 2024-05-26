@@ -1,16 +1,32 @@
 import streamlit as st
-import requests
+import json
 import streamlit.components.v1 as components
 
 font_import = """
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
 """
 
+# Function to load JSON data
+def load_data():
+    with open('/Users/othmane/Desktop/OTHO_CODING/Mistral_AI_Hackathon/hackaton-mistral-studai/Front/test_2/pages/draft_2.json') as f:
+        data = json.load(f)
+    return data
+
+data = load_data()
+content = data['exercise']['content']
+answers = data['exercise']['answers']
+
+# Prepare options from the answers
+options = []
+for key, value in answers.items():
+    options.append({"id": value["correct"], "text": value["correct"]})
+    options.append({"id": value["false"], "text": value["false"]})
+
 # HTML and JavaScript for drag-and-drop functionality with adaptable answer boxes
-drag_and_drop_html = """
+drag_and_drop_html = f"""
     <div>
         <style>
-            .draggable {
+            .draggable {{
                 display: inline-block;
                 padding: 8px;
                 margin: 4px;
@@ -22,8 +38,8 @@ drag_and_drop_html = """
                 font-weight: bold;
                 color: black;
                 text-align: center;
-            }
-            .droppable {
+            }}
+            .droppable {{
                 display: inline-block;
                 min-width: 150px; /* Minimum width of the answer boxes */
                 min-height: 25px; /* Minimum height of the answer boxes */
@@ -37,88 +53,84 @@ drag_and_drop_html = """
                 font-weight: bold;
                 color: white;
                 text-align: center;
-            }
-            body {
+            }}
+            body {{
                 font-family: 'Source Sans Pro', sans-serif;
                 font-size: 22px;
                 color: white;
-            }
+            }}
         </style>
         <script>
-            function allowDrop(ev) {
+            function allowDrop(ev) {{
                 ev.preventDefault();
-            }
+            }}
 
-            function drag(ev) {
+            function drag(ev) {{
                 ev.dataTransfer.setData("text", ev.target.id);
-            }
+            }}
 
-            function drop(ev) {
+            function drop(ev) {{
                 ev.preventDefault();
                 var data = ev.dataTransfer.getData("text");
                 var dropbox = ev.target;
-                if (dropbox.className == "droppable") {
+                if (dropbox.className == "droppable") {{
                     dropbox.innerHTML = document.getElementById(data).innerHTML;
                     dropbox.style.border = '2px solid green';
-                }
-            }
+                    dropbox.dataset.answer = data;
+                }}
+            }}
 
-            function resetDrop(ev) {
+            function resetDrop(ev) {{
                 ev.preventDefault();
                 var data = ev.dataTransfer.getData("text");
                 var dropbox = ev.target;
-                if (dropbox.className == "droppable") {
+                if (dropbox.className == "droppable") {{
                     dropbox.innerHTML = "";
                     dropbox.style.border = '2px dashed #ccc';
-                }
-            }
+                    dropbox.dataset.answer = "";
+                }}
+            }}
         </script>
         <h1><strong>Drag the answers to the blanks:</strong></h1>
         <div id="answers" ondrop="resetDrop(event)" ondragover="allowDrop(event)">
-            <div id="Amazon River" class="draggable" draggable="true" ondragstart="drag(event)">Amazon River oooooooooooo AHAHA LLEL MMO</div>
-            <div id="Nile River" class="draggable" draggable="true" ondragstart="drag(event)">Nile River</div>
-            <div id="Mississippi River" class="draggable" draggable="true" ondragstart="drag(event)">Mississippi River</div>
-            <div id="Atlantic Ocean" class="draggable" draggable="true" ondragstart="drag(event)">Atlantic Ocean</div>
-            <div id="Mediterranean Sea" class="draggable" draggable="true" ondragstart="drag(event)">Mediterranean Sea</div>
-            <div id="Indian Ocean" class="draggable" draggable="true" ondragstart="drag(event)">Indian Ocean</div>
-            <div id="Egypt" class="draggable" draggable="true" ondragstart="drag(event)">Egypt</div>
+"""
+
+# Adding the options to the HTML
+for option in options:
+    drag_and_drop_html += f"""
+        <div id="{option['id']}" class="draggable" draggable="true" ondragstart="drag(event)">{option['text']}</div>
+    """
+
+# Adding the sentence with blanks to the HTML
+for key in answers:
+    content = content.replace(key, f'<div id="{key}" class="droppable" ondrop="drop(event)" ondragover="allowDrop(event)"></div>')
+
+drag_and_drop_html += f"""
         </div>
         <br/>
-        <p>The longest river in the world is the 
-        <div id="blank1" class="droppable" ondrop="drop(event)" ondragover="allowDrop(event)"></div>, 
-        which flows through 
-        <div id="blank2" class="droppable" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-        and empties into the 
-        <div id="blank3" class="droppable" ondrop="drop(event)" ondragover="allowDrop(event)"></div>.</p>
+        <p>{content}</p>
     </div>
 """
 
 # Display the drag-and-drop interface
-components.html(drag_and_drop_html, height=600)
+components.html(drag_and_drop_html + font_import, height=600)
+
 # Function to check the answers
 def check_answers(dropped_answers):
-    correct_answers = {
-        "blank1": "Nile River",
-        "blank2": "Egypt",
-        "blank3": "Mediterranean Sea"
-    }
-    return all(dropped_answers[blank] == correct_answer for blank, correct_answer in correct_answers.items())
+    for key, value in answers.items():
+        if dropped_answers[key] != value["correct"]:
+            return False
+    return True
 
 # Placeholder for user inputs
-dropped_answers = {"blank1": "", "blank2": "", "blank3": ""}
+dropped_answers = {key: "" for key in answers}
 
 # Button to check answers
 if st.button("Submit"):
     # Simulate getting the dropped answers (you would need to get these values from the actual HTML in a real scenario)
-    dropped_answers["blank1"] = st.session_state.get("blank1", "")
-    dropped_answers["blank2"] = st.session_state.get("blank2", "")
-    dropped_answers["blank3"] = st.session_state.get("blank3", "")
+    for key in answers:
+        dropped_answers[key] = st.session_state.get(key, "")
     
-
-    # TODO: make the user win/lose. Eventually populate score data in page 4, use
-    st.session_state['chapter_exercise'] # to define textes à trous
-
-
     if check_answers(dropped_answers):
         st.success("Correct!")
     else:

@@ -1,0 +1,18 @@
+{
+    "sentence": "The longest river in the world is the <blank1>, which flows through <blank2> and empties into the <blank3>.",
+    "options": [
+      {"id": "Station F", "text": "Station F"},
+      {"id": "Amazon River", "text": "Amazon River"},
+      {"id": "Mississippi River", "text": "Mississippi River"},
+      {"id": "Atlantic Ocean", "text": "Atlantic Ocean"},
+      {"id": "Mediterranean Sea", "text": "Mediterranean Sea"},
+      {"id": "Indian Ocean", "text": "Indian Ocean"},
+      {"id": "Egypt", "text": "Egypt"}
+    ],
+    "answers": {
+      "blank1": "Nile River",
+      "blank2": "Egypt",
+      "blank3": "Mediterranean Sea"
+    }
+  }
+  
