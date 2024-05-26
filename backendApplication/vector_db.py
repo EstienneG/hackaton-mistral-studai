@@ -6,6 +6,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter, CharacterTe
 from langchain_core.documents import Document
 from langchain_mistralai import MistralAIEmbeddings
 from langchain.vectorstores import Chroma
+from uuid import uuid4
 
 class PDFProcessor:
     def __init__(self, pdf_path):
@@ -107,16 +108,15 @@ class PDFProcessor:
 
         return transformed_array
 
-# Main execution
-if __name__ == "__main__":
-    pdf_path = "hackaton-mistral-studai/data/RAGAS_09_2023.pdf"
+def upload_document(pdf_path:str, api_key:str, output_path:str, embedding_model_name:str):
+    #pdf_path = "hackaton-mistral-studai/data/RAGAS_09_2023.pdf"
     processor = PDFProcessor(pdf_path)
 
     text = processor.extract_and_clean_text()
     processor.partition_pdf()
     processor.split_text_by_chapters()
     structured_text = processor.transform_sections_to_array()
-    transformed_text = PDFProcessor.transform_array(structured_text)
+    transformed_text = processor.transform_array(structured_text)
 
     # Convert list to string with a space separator
     structured_text = ' '.join(structured_text)
@@ -132,4 +132,15 @@ if __name__ == "__main__":
     mistral_embeddings = MistralAIEmbeddings(api_key=api_key)
     mistral_embeddings.model = "mistral-embed"  
     chroma_db = Chroma.from_documents(docs, mistral_embeddings, persist_directory=output_path)
+
+
+    chapters_structure = [] 
+    for chapter in processor.chapters:
+        chapters_structure.append({
+            "chapter_name": chapter,
+            "chapter_id": uuid4()
+        })
+    
+    return chapters_structure
+
 
