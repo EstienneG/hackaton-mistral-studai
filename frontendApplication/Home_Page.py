@@ -32,7 +32,7 @@ def file_upload_page():
             # Prepare the file for upload
             files = {'file': (uploaded_file.name, uploaded_file, uploaded_file.type)}
 
-            # Send the POST request
+            # TODO: call the backend API to upload the file and return jsp quoi
             response = requests.post(api_url, files=files)
 
             # Display the response from the API

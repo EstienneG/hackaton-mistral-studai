@@ -34,7 +34,7 @@ class VectorDatabaseHandler:
         return context
 
 
-def retrieval(persist_directory, api_key, chapter_selected):
+def retrieval(persist_directory, api_key, chapter_name):
 
     handler = VectorDatabaseHandler(persist_directory, api_key)
 
@@ -45,7 +45,7 @@ def retrieval(persist_directory, api_key, chapter_selected):
     retriever = handler.define_retriever(k=15)
 
     # Simulate document retrieval (replace with actual retrieval logic)
-    docs_retrieved = retriever.invoke(chapter_selected)
+    docs_retrieved = retriever.invoke(chapter_name)
 
     # Extract context from retrieved documents
     context = handler.extract_context(docs_retrieved)

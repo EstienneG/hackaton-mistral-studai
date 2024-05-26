@@ -9,7 +9,7 @@ from generatesummaryfromdocuments import generate_summary_from_document
 app = FastAPI()
 
 class ChapterSummaryRequest(BaseModel):
-    chapter_selected: str
+    chapter_name: str
     difficulty_selected: str
 
 
@@ -18,7 +18,9 @@ class ChapterSummaryResponse(BaseModel):
 
 @app.post("/generate-summary", response_model=ChapterSummaryResponse)
 def process_text_endpoint(request: ChapterSummaryRequest):
-    output_text = generate_summary_from_document(request.chapter_selected, request.difficulty_selected)
+
+    # text_chunks = retrieve_chunks(request.chapter_name)
+    output_text = generate_summary_from_document(text_chunks, request.difficulty_selected)
 
     return {"chapter_summary":output_text}
 

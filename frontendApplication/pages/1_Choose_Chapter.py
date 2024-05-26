@@ -1,5 +1,5 @@
 import streamlit as st
-
+import requests
 # Setting the page configuration
 st.set_page_config(
     page_title="STUDAI - Chapter Selection",
@@ -85,6 +85,25 @@ def chapter_selection_page():
     if st.button("Confirm Selection", key="confirm_selection"):
         if "selected_chapter" in st.session_state and "selected_level" in st.session_state:
             st.session_state["confirmed_selection"] = True
+
+            api_url = "http://127.0.0.1:8000/generate-summary"
+
+            payload = {
+                    "chapter_selected": st.session_state['selected_chapter'],
+                    "difficulty_selected": st.session_state['selected_level']
+            }
+
+            response = requests.post(api_url, json=payload)
+            
+            if response.status_code == 200:
+                        # Afficher la réponse de l'API
+                        result = response.json()
+                        st.write("Réponse de l'API :", result["chapter_summary"])
+                        st.session_state["chapter_summary"] = result["chapter_summary"]
+
+            else:
+                st.write("Erreur dans l'appel à l'API:", response.status_code)
+
 
     # Display the selection if confirmed
     if "confirmed_selection" in st.session_state:

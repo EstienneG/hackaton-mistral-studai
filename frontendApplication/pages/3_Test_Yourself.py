@@ -114,8 +114,8 @@ if st.button("Submit"):
     api_url = "http://127.0.0.1:8000/generate-summary"
 
     payload = {
-            "chapter_selected": "chapitre 1",
-            "difficulty_selected": "Qu'il est difficile d'être le roi de la France"
+            "chapter_name": st.session_state['selected_chapter'],
+            "difficulty_selected": st.session_state['selected_level']
     }
 
     response = requests.post(api_url, json=payload)
