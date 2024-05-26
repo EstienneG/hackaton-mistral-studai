@@ -19,7 +19,7 @@ llm_model = config["models"]["llm_model_name"]
 embedding_model = config["models"]["embedding_model_name"]
 
 class ChapterSummaryRequest(BaseModel):
-    chapter_selected: str
+    chapter_name: str
     difficulty_selected: str
 
 
@@ -29,9 +29,14 @@ class ChapterSummaryResponse(BaseModel):
 @app.post("/generate-summary", response_model=ChapterSummaryResponse)
 def process_text_endpoint(request: ChapterSummaryRequest):
 
+<<<<<<< HEAD
     retrieve_cunks_str = retrieval("../data/chromadb", api_key, request.chapter_selected)
 
     output_text = generate_summary_from_document(retrieve_cunks_str, request.difficulty_selected)
+=======
+    # text_chunks = retrieve_chunks(request.chapter_name)
+    output_text = generate_summary_from_document(text_chunks, request.difficulty_selected)
+>>>>>>> refacto-front
 
     return {"chapter_summary":output_text}
 

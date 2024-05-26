@@ -54,6 +54,10 @@ def chapter_selection_page():
         </style>
     """, unsafe_allow_html=True)
     st.markdown(f"<div style='text-align: justify; font-size: 16px; color: #333;'>{summary_content}</div>", unsafe_allow_html=True)
+    if st.button("Chapter understood!"):
+        # TODO: Call the backend API to generate the texte à trou
+        st.write("Wait a few moments, we're going to test you!")
+
 
 if __name__ == "__main__":
     chapter_selection_page()
