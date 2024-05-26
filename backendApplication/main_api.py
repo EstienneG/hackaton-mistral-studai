@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import langchain_core
 import json
 from retrieval import retrieval
+from generate_fill_gap import generate_fill_gap
 import yaml
 
 # Importer votre fonction de traitement du texte
@@ -28,7 +29,7 @@ class ChapterSummaryResponse(BaseModel):
 @app.post("/generate-summary", response_model=ChapterSummaryResponse)
 def process_text_endpoint(request: ChapterSummaryRequest):
 
-    retrieve_cunks_str = retrieval("hackaton-mistral-studai/data/chromadb", api_key, request.chapter_selected)
+    retrieve_cunks_str = retrieval("../data/chromadb", api_key, request.chapter_selected)
 
     output_text = generate_summary_from_document(retrieve_cunks_str, request.difficulty_selected)
 
@@ -36,6 +37,8 @@ def process_text_endpoint(request: ChapterSummaryRequest):
 
 @app.post("/generate-exercise", response_model=ChapterSummaryResponse)
 def process_text_endpoint(request: ChapterSummaryRequest):
-    output_text = generate_summary_from_document(request.chapter_selected, request.difficulty_selected)
+    retrieved_cunks_str = retrieval("hackaton-mistral-studai/data/chromadb", api_key, request.chapter_selected)
 
-    return {"chapter_summary":output_text}
+    exercise = generate_fill_gap(retrieved_cunks_str, request.difficulty_selected)
+
+    return {"chapter_summary":exercise}

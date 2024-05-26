@@ -103,7 +103,8 @@ def init_critic(llm:ChatMistralAI, revtrieved_chunks:str):
     # Create the Critic Agent 1 chain
     critic_chain = LLMChain(
         llm=llm,
-        prompt=critic_template
+        prompt=critic_template,
+        verbose=True
     )
 
     return critic_chain
