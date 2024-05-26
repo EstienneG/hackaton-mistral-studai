@@ -92,9 +92,6 @@ drag_and_drop_html = """
     </div>
 """
 
-# Display the drag-and-drop interface
-st.components.v1.html(drag_and_drop_html, height=600)
-
 # Function to check the answers
 def check_answers(dropped_answers):
     correct_answers = {
@@ -124,11 +121,11 @@ if st.button("Submit"):
     response = requests.post(api_url, json=payload)
     
     if response.status_code == 200:
-                # Afficher la réponse de l'API
-                result = response.json()
-                st.write("Réponse de l'API :", result["output_text"])
-            else:
-                st.write("Erreur dans l'appel à l'API:", response.status_code)
+        # Afficher la réponse de l'API
+        result = response.json()
+        st.write("Réponse de l'API :", result["chapter_summary"])
+    else:
+        st.write("Erreur dans l'appel à l'API:", response.status_code)
 
 
     if check_answers(dropped_answers):
